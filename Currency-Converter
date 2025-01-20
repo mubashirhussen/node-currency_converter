@@ -1,0 +1,50 @@
+// Import required modules
+const readline = require("readline");
+// Fixed exchange rate (example: 1 USD = 80 INR)
+const EXCHANGE_RATE = 80;
+// Create a readline interface for user input
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+console.log("Welcome to the INR/USD Currency Converter!");
+console.log("------------------------------------------------");
+console.log("1. Convert INR to USD");
+console.log("2. Convert USD to INR");
+console.log("3. Exit");
+// Function to handle conversion logic
+function handleConversion() {
+  rl.question("\nChoose an option (1/2/3): ", (choice) => {
+    if (choice === "3") {
+      console.log("Thank you for using the converter. Goodbye!");
+      rl.close();
+      return;
+    }
+    if (choice !== "1" && choice !== "2") {
+      console.log("Invalid option. Please try again.");
+      handleConversion();
+      return;
+    }
+    rl.question("Enter the amount: ", (amount) => {
+      const numericAmount = parseFloat(amount);
+      if (isNaN(numericAmount) || numericAmount < 0) {
+        console.log("Invalid amount. Please enter a valid positive number.");
+        handleConversion();
+        return;
+      }
+      if (choice === "1") {
+        // INR to USD conversion
+        const convertedAmount = numericAmount / EXCHANGE_RATE;
+        console.log(`${numericAmount.toFixed(2)} INR is approximately ${convertedAmount.toFixed(2)} USD.`);
+      } else if (choice === "2") {
+        // USD to INR conversion
+        const convertedAmount = numericAmount * EXCHANGE_RATE;
+        console.log(`${numericAmount.toFixed(2)} USD is approximately ${convertedAmount.toFixed(2)} INR.`);
+      }
+      // Restart conversion process
+      handleConversion();
+    });
+  });
+}
+// Start the application
+handleConversion();
